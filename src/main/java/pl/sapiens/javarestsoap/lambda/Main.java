@@ -24,6 +24,17 @@ public class Main {
             }
         };
 
+        Lambdable anonymousWay2 = new Lambdable() {
+            @Override
+            public String getNick() {
+                return "Franek";
+            }
+        };
+
+
+
+
+
         //better way
         Lambdable newWay = () -> "Maniek";
         Supplier<String> standardSupplier = () -> "Malina";
