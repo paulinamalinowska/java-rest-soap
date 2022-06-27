@@ -33,21 +33,36 @@ public class RestReservationController {
         return Response.ok(reservations).build();
     }
 
+    //old way
+//    @GET
+//    @Path("/{id}")
+//    public Response findReservationById(@PathParam("id") Long reservationsId) {
+//        log.info("trying to find reservation by id: [{}]", reservationsId);
+//
+//        Response result;
+//        try{
+//            Reservation found =   businessLogic.getReservationById(reservationsId);
+//            result =  Response.ok(found).build();
+//        }catch (NoReservationFoundException e){
+//            result = Response.status(NOT_FOUND).build();
+//        }
+//
+//        return result;
+//    }
+
+
     @GET
     @Path("/{id}")
-    public Response findReservationById(@PathParam("id") Long reservationsId) {
-        log.info("trying to find reservation by id: [{}]", reservationsId);
+    public Response findReservationById(@PathParam("id") Long reservationId) {
+        log.info("trying to find reservation by id: [{}]", reservationId);
 
         Response result;
-        try{
-            Reservation found =   businessLogic.getReservationById(reservationsId);
-            result =  Response.ok(found).build();
-        }catch (NoReservationFoundException e){
-            result = Response.status(NOT_FOUND).build();
-        }
+        Reservation found = businessLogic.getReservationByIdBetter(reservationId);
+        result = Response.ok(found).build();
 
         return result;
     }
+
 
     @POST
     public Response createReservation(Reservation toCreate)  {

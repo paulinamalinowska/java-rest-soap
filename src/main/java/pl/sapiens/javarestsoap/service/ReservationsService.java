@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import pl.sapiens.javarestsoap.dao.ReservationsDAO;
 import pl.sapiens.javarestsoap.entity.Reservation;
 import pl.sapiens.javarestsoap.exception.NoReservationFoundException;
+import pl.sapiens.javarestsoap.exception.NoReservationFoundExceptionBetterOne;
 
 import java.util.List;
 
@@ -30,6 +31,20 @@ public class ReservationsService {
 //        }
 
         return maybeReservation.orElseThrow(() -> new NoReservationFoundException("No reservation with id: " + id));
+
+    }
+
+
+    public Reservation getReservationByIdBetter(Long id) throws NoReservationFoundExceptionBetterOne {
+        log.info("trying to fin reservation by id: [{}]", id);
+        var maybeReservation = dataSource.findReservationById(id);
+
+        //get() -> it's safe only if element is present
+//        if(maybeReservation.isPresent()){
+//            maybeReservation.get();
+//        }
+
+        return maybeReservation.orElseThrow(() -> new NoReservationFoundExceptionBetterOne("No reservation with id: " + id));
 
     }
 
