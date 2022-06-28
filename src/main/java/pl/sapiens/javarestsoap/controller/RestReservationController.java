@@ -3,6 +3,7 @@ package pl.sapiens.javarestsoap.controller;
 import lombok.extern.slf4j.Slf4j;
 import pl.sapiens.javarestsoap.entity.Reservation;
 import pl.sapiens.javarestsoap.exception.NoReservationFoundException;
+import pl.sapiens.javarestsoap.mapper.ReservationMapper;
 import pl.sapiens.javarestsoap.service.ReservationsService;
 
 import javax.ws.rs.*;
@@ -24,12 +25,17 @@ public class RestReservationController {
     private static Reservation theOnlyOne = new Reservation(0L, "Kowalski", 1, LocalDateTime.now(), LocalDateTime.now().plusHours(2), "Wojska Polskiego", "Przy oknie");
 
     private final ReservationsService businessLogic = new ReservationsService();
+    private final ReservationMapper reservationMapper = new ReservationMapper();
 
 
     @GET
     public Response getReservation() {
         log.info("getting all reservation");
         var reservations = businessLogic.getAllResevationsFromDataSource();
+        var reservationsDtos = reservations.stream()
+                .map(reservation -> reservationMapper.fromEntityToDTO(reservation))
+                .toList();
+
         return Response.ok(reservations).build();
     }
 
@@ -58,12 +64,13 @@ public class RestReservationController {
 
         Response result;
         Reservation found = businessLogic.getReservationByIdBetter(reservationId);
-        result = Response.ok(found).build();
+        result = Response.ok(reservationMapper.fromEntityToDTO(found)).build();
 
         return result;
     }
 
 
+    //TODO: homework
     @POST
     public Response createReservation(Reservation toCreate)  {
         log.info("trying to create reservation: [{}]", toCreate);
